@@ -69,14 +69,14 @@ public class RootRestController {
 	 */
 	@GetMapping("/api/getOrder")
 	public String getOrderCompletionTimeByOrderNumber(@RequestParam(name="orderNumber") String orderNumber){
-		Date orderTime = new Date();
+		String timeTillPickup = null;
 		List<CustomerOrder> customerOrders = orderRepository.findAll();
 		for (CustomerOrder customerOrder : customerOrders) {
-			if (customerOrder.getOrderNumber().equals(orderNumber.toUpperCase())){
-				orderTime = customerOrder.getOrderTime();
+			if ((customerOrder.getOrderNumber().equals(orderNumber.toUpperCase())) && (orderTimeService.isValid(customerOrder.getOrderTime()))){
+				timeTillPickup = orderTimeService.getTimeTillPickUp(customerOrder.getOrderTime());
 			}
 		}
-		return orderTimeService.getTimeTillPickUp(orderTime);
+		return timeTillPickup;
 	}
 	
 	/**
