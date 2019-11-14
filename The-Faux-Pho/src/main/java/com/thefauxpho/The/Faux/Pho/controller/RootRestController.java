@@ -3,6 +3,7 @@ package com.thefauxpho.The.Faux.Pho.controller;
 import java.util.Date;
 import java.util.List;
 
+//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import com.thefauxpho.The.Faux.Pho.service.EmailService;
 import com.thefauxpho.The.Faux.Pho.service.FoodOrderRepositoryService;
 import com.thefauxpho.The.Faux.Pho.service.OrderTimeService;
 
+//@CrossOrigin
 @RestController
 public class RootRestController {
 	
