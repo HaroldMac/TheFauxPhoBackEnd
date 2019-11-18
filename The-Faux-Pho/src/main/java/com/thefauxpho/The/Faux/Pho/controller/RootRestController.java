@@ -82,7 +82,7 @@ public class RootRestController {
 	}
 	
 	/**
-	 * Takes customer info and order and submits data to the database
+	 * Takes customer info and order and submits data to the database if the store is currently open
 	 * @param customerName: customer name
 	 * @param customerEmail: customer email address
 	 * @param foods: list of foods the customer ordered
@@ -90,23 +90,26 @@ public class RootRestController {
 	 */
 	@PostMapping("/api/order")
 	public CustomerOrder submitOrder(@RequestParam(name="customerName") String customerName, @RequestParam(name="customerEmail") String customerEmail, @RequestBody List<Food> foods){
-		
-		//create order
-		Date now = new Date();
-		CustomerOrder order = new CustomerOrder(customerName, customerEmail, now);
-		
-		// save order
-		foodOrderRepositoryService.saveFoodOrder(order, foods);
-		//foodOrderRepositoryService.runnableSaveFoodOrder(order, foods);
+		if (orderTimeService.isOpen()) {
+			//create order
+			Date now = new Date();
+			CustomerOrder order = new CustomerOrder(customerName, customerEmail, now);
 			
-		//send confirmation email
-		emailService.sendConfirmationOrderNumber(order);
-		
-		//prepare and send response object
-		foods.forEach(food -> food.setOrders(null));
-		order.setFoods(foods);
-		//order.setFoods(null);
-		return order;
+			// save order
+			foodOrderRepositoryService.saveFoodOrder(order, foods);
+			//foodOrderRepositoryService.runnableSaveFoodOrder(order, foods);
+				
+			//send confirmation email
+			emailService.sendConfirmationOrderNumber(order);
+			
+			//prepare and send response object
+			foods.forEach(food -> food.setOrders(null));
+			order.setFoods(foods);
+			//order.setFoods(null);
+			return order;
+		} else {
+			return null;
+		}
 	}
 
 }
